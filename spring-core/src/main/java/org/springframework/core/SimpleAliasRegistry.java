@@ -37,6 +37,8 @@ import org.springframework.util.StringValueResolver;
  *
  * @author Juergen Hoeller
  * @since 2.5.2
+ *
+ * 主要是用了Map作为alias的缓存,对接口aliasRegistry 进行简单实现
  */
 public class SimpleAliasRegistry implements AliasRegistry {
 
@@ -208,6 +210,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 
 	/**
 	 * Determine the raw name, resolving aliases to canonical names.
+	 * 获取指定 alias 所表示最终的 beanName
 	 * @param name the user-specified name
 	 * @return the transformed name
 	 */
@@ -215,6 +218,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 		String canonicalName = name;
 		// Handle aliasing...
 		String resolvedName;
+		// 循环从 aliasMap 中获取 beanName
 		do {
 			resolvedName = this.aliasMap.get(canonicalName);
 			if (resolvedName != null) {

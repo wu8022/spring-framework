@@ -22,6 +22,8 @@ package org.springframework.core;
  *
  * @author Juergen Hoeller
  * @since 2.5.2
+ *
+ * 定义对 alias 的简单的增删改查操作
  */
 public interface AliasRegistry {
 

@@ -27,6 +27,11 @@ import org.springframework.lang.Nullable;
  * {@link org.springframework.beans.factory.config.ConfigurableBeanFactory}
  * are available for specific purposes.
  *
+ * 访问spring bean 容器的根接口,定义了获取bean和bean的各种属性
+ * Bean容器的基本客户端视图，这个接口有许多Bean定义的实现
+ * 非常纯粹的bean容器,他是IOC中必备的数据接口,其中BeanDefinition是他的基本结构,
+ * BeanFactory内部维护了一个BeanDefinition Map, 丙可根据BeanDefinition 的描述进行Bean的创建和管理
+ *
  * <p>This interface is implemented by objects that hold a number of bean definitions,
  * each uniquely identified by a String name. Depending on the bean definition,
  * the factory will return either an independent instance of a contained object

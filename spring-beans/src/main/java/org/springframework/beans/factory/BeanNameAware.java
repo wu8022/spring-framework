@@ -23,6 +23,10 @@ package org.springframework.beans.factory;
  * brittle dependence on external configuration, as well as a possibly
  * unnecessary dependence on a Spring API.
  *
+ * 设置Bean的名称,只要实现该方法,不建议使用它
+ *
+ * 所有bean的生命周期方法
+ *
  * <p>For a list of all bean lifecycle methods, see the
  * {@link BeanFactory BeanFactory javadocs}.
  *

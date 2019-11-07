@@ -27,6 +27,9 @@ import java.lang.annotation.Target;
  * Can also be used at the type level, in which case all of the type's methods are
  * considered as asynchronous.
  *
+ * 注解 用来 标记一个方法被 asynchronous 进行调用
+ * 同样可以使用类型级别 在这种情况下 所有方法都是被异步执行的
+ *
  * <p>In terms of target method signatures, any parameter types are supported.
  * However, the return type is constrained to either {@code void} or
  * {@link java.util.concurrent.Future}. In the latter case, you may declare the

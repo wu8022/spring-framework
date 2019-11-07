@@ -36,6 +36,8 @@ import org.springframework.util.concurrent.ListenableFutureTask;
  * <p>Supports limiting concurrent threads through the "concurrencyLimit"
  * bean property. By default, the number of concurrent threads is unlimited.
  *
+ * 支持通过 concurrencylimit 属性来显示当前线程数量， 默认情况下，当前线程数量不受限制
+ *
  * <p><b>NOTE: This implementation does not reuse threads!</b> Consider a
  * thread-pooling TaskExecutor implementation instead, in particular for
  * executing a large number of short-lived tasks.

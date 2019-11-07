@@ -33,6 +33,7 @@ import org.springframework.util.ResourceUtils;
 /**
  * Convenience base class for {@link Resource} implementations,
  * pre-implementing typical behavior.
+ * Resource资源接口的默认实现类,他实现了Resource接口大部分的公共实现,是Resource接口的重中之重
  *
  * <p>The "exists" method will check whether a File or InputStream can
  * be opened; "isOpen" will always return false; "getURL" and "getFile"
@@ -47,6 +48,7 @@ public abstract class AbstractResource implements Resource {
 	 * This implementation checks whether a File can be opened,
 	 * falling back to whether an InputStream can be opened.
 	 * This will cover both directories and content resources.
+	 * 判断资源是否存在,如果过程中出现异常则关闭inputstream
 	 */
 	@Override
 	public boolean exists() {
@@ -68,6 +70,7 @@ public abstract class AbstractResource implements Resource {
 
 	/**
 	 * This implementation always returns {@code true} for a resource
+	 * 直接返回true表示资源文件可以读取
 	 * that {@link #exists() exists} (revised as of 5.1).
 	 */
 	@Override
@@ -77,6 +80,7 @@ public abstract class AbstractResource implements Resource {
 
 	/**
 	 * This implementation always returns {@code false}.
+	 * 直接返回false 表示未被打开
 	 */
 	@Override
 	public boolean isOpen() {
@@ -85,6 +89,7 @@ public abstract class AbstractResource implements Resource {
 
 	/**
 	 * This implementation always returns {@code false}.
+	 * 直接返回false 表示不是File
 	 */
 	@Override
 	public boolean isFile() {
@@ -94,6 +99,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation throws a FileNotFoundException, assuming
 	 * that the resource cannot be resolved to a URL.
+	 * 直接抛出FileNotFoundException,假设资源文件是可以不可以被解决,直接交给子类去实现
 	 */
 	@Override
 	public URL getURL() throws IOException {
@@ -103,6 +109,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation builds a URI based on the URL returned
 	 * by {@link #getURL()}.
+	 * 基于getURL构建实现的URI
 	 */
 	@Override
 	public URI getURI() throws IOException {
@@ -118,6 +125,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation throws a FileNotFoundException, assuming
 	 * that the resource cannot be resolved to an absolute file path.
+	 * 直接抛出FileNotFoundException,剩下部分交给子类去实现
 	 */
 	@Override
 	public File getFile() throws IOException {
@@ -129,6 +137,7 @@ public abstract class AbstractResource implements Resource {
 	 * with the result of {@link #getInputStream()}.
 	 * <p>This is the same as in {@link Resource}'s corresponding default method
 	 * but mirrored here for efficient JVM-level dispatching in a class hierarchy.
+	 * 根据getInputStream去实现返回ReadableByteChannel
 	 */
 	@Override
 	public ReadableByteChannel readableChannel() throws IOException {
@@ -139,6 +148,8 @@ public abstract class AbstractResource implements Resource {
 	 * This implementation reads the entire InputStream to calculate the
 	 * content length. Subclasses will almost always be able to provide
 	 * a more optimal version of this, e.g. checking a File length.
+	 * 获取资源的长度
+	 * 这个资源的长度就是资源的字节长度,通过全部读取一遍来实现
 	 * @see #getInputStream()
 	 */
 	@Override
@@ -165,6 +176,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation checks the timestamp of the underlying File,
 	 * if available.
+	 * 返回资源的最后修改时间
 	 * @see #getFileForLastModifiedCheck()
 	 */
 	@Override
@@ -193,6 +205,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation throws a FileNotFoundException, assuming
 	 * that relative resources cannot be created for this resource.
+	 * 直接抛出FileNotFoundException异常,假设资源文件不存在，交给子类去实现
 	 */
 	@Override
 	public Resource createRelative(String relativePath) throws IOException {
@@ -202,6 +215,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation always returns {@code null},
 	 * assuming that this resource type does not have a filename.
+	 * 返回为NULl,交给子类实现
 	 */
 	@Override
 	@Nullable
@@ -231,6 +245,7 @@ public abstract class AbstractResource implements Resource {
 
 	/**
 	 * This implementation returns the description of this resource.
+	 * 返回资源的文件描述
 	 * @see #getDescription()
 	 */
 	@Override

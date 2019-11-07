@@ -21,6 +21,8 @@ package org.springframework.core.io;
  * file system resources rather than as class path resources
  * (the latter is {@link DefaultResourceLoader}'s default strategy).
  *
+ * 继承 DefaultResourceLoader , 覆盖了 getResourceByPath 方法，使得从文件系统中加载资源并以 FileSystemContextResource 类型进行返回
+ *
  * <p><b>NOTE:</b> Plain paths will always be interpreted as relative
  * to the current VM working directory, even if they start with a slash.
  * (This is consistent with the semantics in a Servlet container.)
@@ -58,6 +60,7 @@ public class FileSystemResourceLoader extends DefaultResourceLoader {
 	/**
 	 * FileSystemResource that explicitly expresses a context-relative path
 	 * through implementing the ContextResource interface.
+	 * 通过实现 ContextResource 接口来显示的表示上下文路径
 	 */
 	private static class FileSystemContextResource extends FileSystemResource implements ContextResource {
 

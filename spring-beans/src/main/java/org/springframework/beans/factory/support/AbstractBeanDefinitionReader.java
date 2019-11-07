@@ -38,6 +38,8 @@ import org.springframework.util.Assert;
  * Abstract base class for bean definition readers which implement
  * the {@link BeanDefinitionReader} interface.
  *
+ * 抽象类 实现了  BeanDefinitionReader 和 EnvironmentCapable 的接口,基本上是对两个接口功能的实现
+ *
  * <p>Provides common properties like the bean factory to work on
  * and the class loader to use for loading bean classes.
  *

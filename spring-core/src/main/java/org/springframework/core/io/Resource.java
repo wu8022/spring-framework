@@ -29,10 +29,12 @@ import org.springframework.lang.Nullable;
 /**
  * Interface for a resource descriptor that abstracts from the actual
  * type of underlying resource, such as a file or class path resource.
+ * 资源对象的抽象,他的每一个实现类都代表着一种资源访问策略
  *
  * <p>An InputStream can be opened for every resource if it exists in
  * physical form, but a URL or File handle can just be returned for
  * certain resources. The actual behavior is implementation-specific.
+ * inputStream 可以被打开的物理存在的资源文件
  *
  * @author Juergen Hoeller
  * @since 28.12.2003
@@ -56,6 +58,7 @@ public interface Resource extends InputStreamSource {
 	 * <p>This method performs a definitive existence check, whereas the
 	 * existence of a {@code Resource} handle only guarantees a valid
 	 * descriptor handle.
+	 * 资源是否存在
 	 */
 	boolean exists();
 
@@ -67,6 +70,7 @@ public interface Resource extends InputStreamSource {
 	 * Note that actual content reading may still fail when attempted.
 	 * However, a value of {@code false} is a definitive indication
 	 * that the resource content cannot be read.
+	 * 资源是否可读
 	 * @see #getInputStream()
 	 * @see #exists()
 	 */
@@ -79,6 +83,7 @@ public interface Resource extends InputStreamSource {
 	 * If {@code true}, the InputStream cannot be read multiple times,
 	 * and must be read and closed to avoid resource leaks.
 	 * <p>Will be {@code false} for typical resource descriptors.
+	 * 资源所代表的句柄是否被一个stream打开
 	 */
 	default boolean isOpen() {
 		return false;
@@ -89,6 +94,7 @@ public interface Resource extends InputStreamSource {
 	 * A value of {@code true} strongly suggests (but does not guarantee)
 	 * that a {@link #getFile()} call will succeed.
 	 * <p>This is conservatively {@code false} by default.
+	 * 是否为一个file
 	 * @since 5.0
 	 * @see #getFile()
 	 */
@@ -100,6 +106,7 @@ public interface Resource extends InputStreamSource {
 	 * Return a URL handle for this resource.
 	 * @throws IOException if the resource cannot be resolved as URL,
 	 * i.e. if the resource is not available as descriptor
+	 * 获取这个资源文件的URL句柄
 	 */
 	URL getURL() throws IOException;
 
@@ -107,12 +114,14 @@ public interface Resource extends InputStreamSource {
 	 * Return a URI handle for this resource.
 	 * @throws IOException if the resource cannot be resolved as URI,
 	 * i.e. if the resource is not available as descriptor
+	 * 返回这个文件的URI句柄
 	 * @since 2.5
 	 */
 	URI getURI() throws IOException;
 
 	/**
 	 * Return a File handle for this resource.
+	 * 返回这个资源的文件句柄
 	 * @throws java.io.FileNotFoundException if the resource cannot be resolved as
 	 * absolute file path, i.e. if the resource is not available in a file system
 	 * @throws IOException in case of general resolution/reading failures
@@ -137,6 +146,7 @@ public interface Resource extends InputStreamSource {
 
 	/**
 	 * Determine the content length for this resource.
+	 * 资源文件的内容长度
 	 * @throws IOException if the resource cannot be resolved
 	 * (in the file system or as some other known physical resource type)
 	 */
@@ -144,6 +154,7 @@ public interface Resource extends InputStreamSource {
 
 	/**
 	 * Determine the last-modified timestamp for this resource.
+	 * 资源文件的最后一次更改时间
 	 * @throws IOException if the resource cannot be resolved
 	 * (in the file system or as some other known physical resource type)
 	 */
@@ -151,6 +162,7 @@ public interface Resource extends InputStreamSource {
 
 	/**
 	 * Create a resource relative to this resource.
+	 * 根据资源文件相对路径创建新的资源
 	 * @param relativePath the relative path (relative to this resource)
 	 * @return the resource handle for the relative resource
 	 * @throws IOException if the relative resource cannot be determined
@@ -160,6 +172,7 @@ public interface Resource extends InputStreamSource {
 	/**
 	 * Determine a filename for this resource, i.e. typically the last
 	 * part of the path: for example, "myfile.txt".
+	 * 获取资源文件名称
 	 * <p>Returns {@code null} if this type of resource does not
 	 * have a filename.
 	 */
@@ -168,6 +181,7 @@ public interface Resource extends InputStreamSource {
 
 	/**
 	 * Return a description for this resource,
+	 * 资源的描述
 	 * to be used for error output when working with the resource.
 	 * <p>Implementations are also encouraged to return this value
 	 * from their {@code toString} method.

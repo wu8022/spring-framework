@@ -32,6 +32,8 @@ import org.springframework.core.Ordered;
  * Enables Spring's asynchronous method execution capability, similar to functionality
  * found in Spring's {@code <task:*>} XML namespace.
  *
+ * 启用 spring 异步方法执行, 类似的功能可以在 spring 中 XML标签中 task 命名空间下
+ *
  * <p>To be used together with @{@link Configuration Configuration} classes as follows,
  * enabling annotation-driven async processing for an entire Spring application context:
  *
@@ -154,7 +156,7 @@ import org.springframework.core.Ordered;
  * @since 3.1
  * @see Async
  * @see AsyncConfigurer
- * @see AsyncConfigurationSelector
+ * @see AsyncConfigurationSelector 异步配置选择器
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -165,6 +167,8 @@ public @interface EnableAsync {
 	/**
 	 * Indicate the 'async' annotation type to be detected at either class
 	 * or method level.
+	 * 需要检测的注解 默认是 @async 和 @Asynchronous 也可以添加其他
+	 * 这些注解标记的方法将会被异步执行
 	 * <p>By default, both Spring's @{@link Async} annotation and the EJB 3.1
 	 * {@code @javax.ejb.Asynchronous} annotation will be detected.
 	 * <p>This attribute exists so that developers can provide their own
@@ -176,6 +180,7 @@ public @interface EnableAsync {
 	/**
 	 * Indicate whether subclass-based (CGLIB) proxies are to be created as opposed
 	 * to standard Java interface-based proxies.
+	 * 标识使用的代理方式 是使用 cglib还是使用 proxy
 	 * <p><strong>Applicable only if the {@link #mode} is set to {@link AdviceMode#PROXY}</strong>.
 	 * <p>The default is {@code false}.
 	 * <p>Note that setting this attribute to {@code true} will affect <em>all</em>

@@ -33,6 +33,8 @@ import org.springframework.util.CollectionUtils;
  * Abstract base {@code Configuration} class providing common structure for enabling
  * Spring's asynchronous method execution capability.
  *
+ * 基础抽象类 提供了 spring 异步方法通用结构体的执行能力
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @author Stephane Nicoll
@@ -52,6 +54,10 @@ public abstract class AbstractAsyncConfiguration implements ImportAware {
 	protected Supplier<AsyncUncaughtExceptionHandler> exceptionHandler;
 
 
+	/**
+	 * 完成注解参数的读取
+	 * @param importMetadata
+	 */
 	@Override
 	public void setImportMetadata(AnnotationMetadata importMetadata) {
 		this.enableAsync = AnnotationAttributes.fromMap(

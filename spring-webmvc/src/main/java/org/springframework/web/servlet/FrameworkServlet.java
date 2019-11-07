@@ -873,12 +873,14 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		// 获取请求方法
 		HttpMethod httpMethod = HttpMethod.resolve(request.getMethod());
+		// 处理 PATCH  方法
 		if (httpMethod == HttpMethod.PATCH || httpMethod == null) {
 			processRequest(request, response);
 		}
 		else {
+			// 调用父类 处理其他请求
 			super.service(request, response);
 		}
 	}

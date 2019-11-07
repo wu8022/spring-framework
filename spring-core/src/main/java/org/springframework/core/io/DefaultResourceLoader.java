@@ -32,6 +32,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * Default implementation of the {@link ResourceLoader} interface.
+ * 默认的资源加载器,是ResourceLoader的默认实现
  * Used by {@link ResourceEditor}, and serves as base class for
  * {@link org.springframework.context.support.AbstractApplicationContext}.
  * Can also be used standalone.
@@ -57,6 +58,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 
 	/**
 	 * Create a new DefaultResourceLoader.
+	 * 创建一个默认的资源加载器
 	 * <p>ClassLoader access will happen using the thread context class loader
 	 * at the time of this ResourceLoader's initialization.
 	 * @see java.lang.Thread#getContextClassLoader()
@@ -100,6 +102,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	/**
 	 * Register the given resolver with this resource loader, allowing for
 	 * additional protocols to be handled.
+	 * 注册一个给定的 resource loader 用来允许处理附加协议
 	 * <p>Any such resolver will be invoked ahead of this loader's standard
 	 * resolution rules. It may therefore also override any default rules.
 	 * @since 4.3
@@ -140,10 +143,17 @@ public class DefaultResourceLoader implements ResourceLoader {
 	}
 
 
+	/**
+	 * ResouceLoader最核心的方法，根据提供的location返回Resource,defaultResouceLoader提供了核心实现
+	 * (因为DefaultResourceLoader的子类没有覆盖改方法,因此断定ResouceLoader的资源加载策略就是在这里被实现的)
+	 * @param location the resource location
+	 * @return
+	 */
 	@Override
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
 
+		// 首先通过 ProtocolResolver 来加载所有资源
 		for (ProtocolResolver protocolResolver : this.protocolResolvers) {
 			Resource resource = protocolResolver.resolve(location, this);
 			if (resource != null) {
@@ -151,13 +161,16 @@ public class DefaultResourceLoader implements ResourceLoader {
 			}
 		}
 
+		// 以 / 为开头,返回 ClassPathContextResource 类型的资源
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
+		// 以 clasapatch: 开头，返回 ClassPathResource 类型的资源
 		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
 			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
 		else {
+			// 根据是否为URL类型,返回 UrlResource 类型资源 或者 FileUrlResource 类型的资源
 			try {
 				// Try to parse the location as a URL...
 				URL url = new URL(location);

@@ -39,6 +39,8 @@ import org.springframework.util.ClassUtils;
  * asynchronously, using a given {@link org.springframework.core.task.AsyncTaskExecutor}.
  * Typically used with the {@link org.springframework.scheduling.annotation.Async} annotation.
  *
+ * 异步执行拦截器
+ *
  * <p>In terms of target method signatures, any parameter types are supported.
  * However, the return type is constrained to either {@code void} or
  * {@code java.util.concurrent.Future}. In the latter case, the Future handle
@@ -103,13 +105,13 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport imple
 		Class<?> targetClass = (invocation.getThis() != null ? AopUtils.getTargetClass(invocation.getThis()) : null);
 		Method specificMethod = ClassUtils.getMostSpecificMethod(invocation.getMethod(), targetClass);
 		final Method userDeclaredMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
-
+		// 确定异步执行器,在spring上下文中找到实现 TaskExecutor的实例
 		AsyncTaskExecutor executor = determineAsyncExecutor(userDeclaredMethod);
 		if (executor == null) {
 			throw new IllegalStateException(
 					"No executor specified and no default executor set on AsyncExecutionInterceptor either");
 		}
-
+		// 建立一个线程,用于执行异步目标方法.该段代码只是线程的生命,而没有直接的调用
 		Callable<Object> task = () -> {
 			try {
 				Object result = invocation.proceed();
@@ -146,6 +148,7 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport imple
 	/**
 	 * This implementation searches for a unique {@link org.springframework.core.task.TaskExecutor}
 	 * bean in the context, or for an {@link Executor} bean named "taskExecutor" otherwise.
+	 * 此实现将在 spring 上下文中 搜索唯一的 TaskExecutor , 或者是一个名字为 taskExecutor
 	 * If neither of the two is resolvable (e.g. if no {@code BeanFactory} was configured at all),
 	 * this implementation falls back to a newly created {@link SimpleAsyncTaskExecutor} instance
 	 * for local use if no default could be found.
@@ -154,7 +157,9 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport imple
 	@Override
 	@Nullable
 	protected Executor getDefaultExecutor(@Nullable BeanFactory beanFactory) {
+		// 从父类中获取 Executor
 		Executor defaultExecutor = super.getDefaultExecutor(beanFactory);
+		// 如果 defaultExecutor 为空, 则返回一个默认的 SimpleAsyncTaskExecutor
 		return (defaultExecutor != null ? defaultExecutor : new SimpleAsyncTaskExecutor());
 	}
 

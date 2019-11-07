@@ -31,6 +31,8 @@ import org.springframework.lang.Nullable;
  * EntityResolver implementation for the Spring beans DTD,
  * to load the DTD from the Spring class path (or JAR file).
  *
+ * 实现了 EntityResolver 接口, 从 spring bean DTD 解码器, 用来从 spring class path 或者 jar 中加载 DTD 文件
+ *
  * <p>Fetches "spring-beans.dtd" from the class path resource
  * "/org/springframework/beans/factory/xml/spring-beans.dtd",
  * no matter whether specified as some local URL that includes "spring-beans"
@@ -43,8 +45,10 @@ import org.springframework.lang.Nullable;
  */
 public class BeansDtdResolver implements EntityResolver {
 
+	// DTD 的后缀
 	private static final String DTD_EXTENSION = ".dtd";
 
+	// spring bean DTD 的文件名
 	private static final String DTD_NAME = "spring-beans";
 
 	private static final Log logger = LogFactory.getLog(BeansDtdResolver.class);
@@ -57,8 +61,11 @@ public class BeansDtdResolver implements EntityResolver {
 			logger.trace("Trying to resolve XML entity with public ID [" + publicId +
 					"] and system ID [" + systemId + "]");
 		}
+		// systemId 必须以 dtd 文件名结尾
 		if (systemId != null && systemId.endsWith(DTD_EXTENSION)) {
+			// 获取最后一个 / 的位置
 			int lastPathSeparator = systemId.lastIndexOf('/');
+			// 获取 spring-bean 的位置
 			int dtdNameStart = systemId.indexOf(DTD_NAME, lastPathSeparator);
 			if (dtdNameStart != -1) {
 				String dtdFile = DTD_NAME + DTD_EXTENSION;
@@ -66,7 +73,9 @@ public class BeansDtdResolver implements EntityResolver {
 					logger.trace("Trying to locate [" + dtdFile + "] in Spring jar on classpath");
 				}
 				try {
+					// 创建 ClassPathResource 资源
 					Resource resource = new ClassPathResource(dtdFile, getClass());
+					// 创建 InputSource 对象, 并设置 publicId 和 systemId
 					InputSource source = new InputSource(resource.getInputStream());
 					source.setPublicId(publicId);
 					source.setSystemId(systemId);
@@ -83,6 +92,7 @@ public class BeansDtdResolver implements EntityResolver {
 			}
 		}
 
+		// 默认行为 从 website 下载文件
 		// Use the default behavior -> download from website or wherever.
 		return null;
 	}

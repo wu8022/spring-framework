@@ -47,8 +47,10 @@ public class AsyncConfigurationSelector extends AdviceModeImportSelector<EnableA
 	public String[] selectImports(AdviceMode adviceMode) {
 		switch (adviceMode) {
 			case PROXY:
+				// 默认使用 proxy 的配置方式
 				return new String[] {ProxyAsyncConfiguration.class.getName()};
 			case ASPECTJ:
+				// 使用 aspectj 的配置方式
 				return new String[] {ASYNC_EXECUTION_ASPECT_CONFIGURATION_CLASS_NAME};
 			default:
 				return null;

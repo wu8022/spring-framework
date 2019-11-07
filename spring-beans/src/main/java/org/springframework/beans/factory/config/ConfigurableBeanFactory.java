@@ -36,6 +36,8 @@ import org.springframework.util.StringValueResolver;
  * client methods in the {@link org.springframework.beans.factory.BeanFactory}
  * interface.
  *
+ * 提供配置factory的各种方法
+ *
  * <p>This bean factory interface is not meant to be used in normal application
  * code: Stick to {@link org.springframework.beans.factory.BeanFactory} or
  * {@link org.springframework.beans.factory.ListableBeanFactory} for typical

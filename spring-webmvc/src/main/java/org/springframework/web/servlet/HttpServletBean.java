@@ -87,6 +87,7 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 	@Nullable
 	private ConfigurableEnvironment environment;
 
+	// 必须要的配置集合
 	private final Set<String> requiredProperties = new HashSet<>(4);
 
 
@@ -141,19 +142,28 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 	/**
 	 * Map config parameters onto bean properties of this servlet, and
 	 * invoke subclass initialization.
+	 *
+	 * 设置这个 servlet 的 bean 配置，被子类进行调用
+	 *
 	 * @throws ServletException if bean properties are invalid (or required
 	 * properties are missing), or if subclass initialization fails.
 	 */
 	@Override
 	public final void init() throws ServletException {
 
+		// 解析 init-parameters 标签设置到 PropertyValue 对象中
 		// Set bean properties from init parameters.
 		PropertyValues pvs = new ServletConfigPropertyValues(getServletConfig(), this.requiredProperties);
 		if (!pvs.isEmpty()) {
 			try {
+				// 将当前这个 servlet 对象 转化成 beanWrapper 对象，从而能够以 spring 的方式讲 pvs 注入到 beanwapper 对象中
 				BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(this);
 				ResourceLoader resourceLoader = new ServletContextResourceLoader(getServletContext());
+
+				// 注册一个自定义属性编辑器，一单碰到 Resource 属性，将会使用 ResourceEditor 进行解析
 				bw.registerCustomEditor(Resource.class, new ResourceEditor(resourceLoader, getEnvironment()));
+
+				// 空实现 留给子类进行实现
 				initBeanWrapper(bw);
 				bw.setPropertyValues(pvs, true);
 			}
@@ -166,6 +176,7 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 		}
 
 		// Let subclasses do whatever initialization they like.
+		// 留给子类进行实现，目前有具体的实现
 		initServletBean();
 	}
 

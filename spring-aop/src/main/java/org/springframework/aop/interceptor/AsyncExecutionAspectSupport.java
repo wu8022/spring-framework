@@ -156,19 +156,29 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 
 	/**
 	 * Determine the specific executor to use when executing the given method.
+	 * 当执行指定方法时 决定具体的执行器
 	 * Should preferably return an {@link AsyncListenableTaskExecutor} implementation.
 	 * @return the executor to use (or {@code null}, but just if no default executor is available)
 	 */
 	@Nullable
 	protected AsyncTaskExecutor determineAsyncExecutor(Method method) {
+		/**
+		 * executor 的缓存器,类型是 Map<Method, AsyncTaskExecutor>
+		 *     用来缓存方法执行器 第一次加载时 executor 为空, 调用一次后对应的关系缓存在map中
+ 		 */
 		AsyncTaskExecutor executor = this.executors.get(method);
 		if (executor == null) {
 			Executor targetExecutor;
+			/**
+			 * 子类 AsyncExecutionInterceptor 方法返回值为Null
+			 * 子类 AnnotationAsyncExecutionInterceptor 返回的方法是
+ 			 */
 			String qualifier = getExecutorQualifier(method);
 			if (StringUtils.hasLength(qualifier)) {
 				targetExecutor = findQualifiedExecutor(this.beanFactory, qualifier);
 			}
 			else {
+				// 指定的执行器
 				targetExecutor = this.defaultExecutor.get();
 			}
 			if (targetExecutor == null) {
@@ -176,6 +186,7 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 			}
 			executor = (targetExecutor instanceof AsyncListenableTaskExecutor ?
 					(AsyncListenableTaskExecutor) targetExecutor : new TaskExecutorAdapter(targetExecutor));
+			// 将得到的执行器加入缓存中
 			this.executors.put(method, executor);
 		}
 		return executor;
@@ -213,7 +224,9 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 
 	/**
 	 * Retrieve or build a default executor for this advice instance.
+	 * 为这个 advice 增强 检索或者构建一个默认的执行实例
 	 * An executor returned from here will be cached for further use.
+	 * 这儿将返回一个未来将被使用的执行器
 	 * <p>The default implementation searches for a unique {@link TaskExecutor} bean
 	 * in the context, or for an {@link Executor} bean named "taskExecutor" otherwise.
 	 * If neither of the two is resolvable, this implementation will return {@code null}.

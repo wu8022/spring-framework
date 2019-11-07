@@ -25,6 +25,8 @@ import org.springframework.lang.Nullable;
  * Simple interface for bean definition readers.
  * Specifies load methods with Resource and String location parameters.
  *
+ * 读取 spring 的配置文件内容， 并将其转化成 IOC 容器的内部的数据结构 BeanDefinition
+ *
  * <p>Concrete bean definition readers can of course add additional
  * load and register methods for bean definitions, specific to
  * their bean definition format.
@@ -92,6 +94,8 @@ public interface BeanDefinitionReader {
 
 	/**
 	 * Load bean definitions from the specified resources.
+	 * 从指定的resouces资源文件中 加载 BeanDefinition
+	 *
 	 * @param resources the resource descriptors
 	 * @return the number of bean definitions found
 	 * @throws BeanDefinitionStoreException in case of loading or parsing errors
@@ -102,6 +106,8 @@ public interface BeanDefinitionReader {
 	 * Load bean definitions from the specified resource location.
 	 * <p>The location can also be a location pattern, provided that the
 	 * ResourceLoader of this bean definition reader is a ResourcePatternResolver.
+	 * 从 location 资源文件中 加载 bean defintion 对象
+	 *
 	 * @param location the resource location, to be loaded with the ResourceLoader
 	 * (or ResourcePatternResolver) of this bean definition reader
 	 * @return the number of bean definitions found

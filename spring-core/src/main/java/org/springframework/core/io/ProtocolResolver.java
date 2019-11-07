@@ -20,6 +20,8 @@ import org.springframework.lang.Nullable;
 
 /**
  * A resolution strategy for protocol-specific resource handles.
+ * 用户自定义协议解决策略,它允许用户自定义资源加载协议,并不需要继承 ResourceLoader
+ * 如果成功 则返回对应的 Resource
  *
  * <p>Used as an SPI for {@link DefaultResourceLoader}, allowing for
  * custom protocols to be handled without subclassing the loader
@@ -35,6 +37,8 @@ public interface ProtocolResolver {
 	/**
 	 * Resolve the given location against the given resource loader
 	 * if this implementation's protocol matches.
+	 * 使用指定的 ResourceLoader, 加载 location 位置的资源
+	 *
 	 * @param location the user-specified resource location
 	 * @param resourceLoader the associated resource loader
 	 * @return a corresponding {@code Resource} handle if the given location
